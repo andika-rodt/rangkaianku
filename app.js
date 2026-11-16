@@ -622,6 +622,11 @@
       banner.textContent = failed.length + ' uji mandiri gagal \u2014 buka tab Sistem';
       banner.classList.add('show');
       banner.addEventListener('click', function () { setTab('system'); });
+    } else if (S.regression) {
+      var b2 = $('banner');
+      b2.textContent = 'Build baru (' + S.regression.from + ' \u2192 ' + CORE.BUILD + ') menggagalkan uji: ' + S.regression.tests.join(', ');
+      b2.classList.add('show');
+      b2.addEventListener('click', function () { setTab('system'); });
     }
 
     svg.addEventListener('pointerdown', onPointerDown);
