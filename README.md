@@ -1,6 +1,6 @@
 # RangkaianKu
 
-PWA belajar & simulasi rangkaian listrik sederhana. Dibuat untuk HP: kanvas rangkaian, pustaka komponen, simulasi DC, penyimpanan lokal.
+PWA belajar & simulasi rangkaian listrik sederhana: 18 komponen (R, potensio, LDR, LED, dioda, zener, induktor, sekring, saklar, kapasitor, NPN, buzzer, meter, sumber), simulasi DC transistor, dan tautan datasheet. Dibuat untuk HP: kanvas rangkaian, pustaka komponen, simulasi DC, penyimpanan lokal.
 
 - `index.html` — aplikasi
 - `sim.js` — mesin simulasi (MNA DC)

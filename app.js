@@ -114,25 +114,58 @@
   function compSymbol(c, g) {
     var d = DEFS[c.type];
     var w = d.w, h = d.h;
-    var body = el('rect', { x: -w / 2, y: -h / 2, width: w, height: h, rx: 7, class: 'cbody' });
-    g.appendChild(body);
+    g.appendChild(el('rect', { x: -w / 2, y: -h / 2, width: w, height: h, rx: 7, class: 'cbody' }));
 
     if (c.type === 'battery') {
       g.appendChild(el('line', { x1: -8, y1: -h / 2 + 4, x2: -8, y2: h / 2 - 4, class: 'csym' }));
       g.appendChild(el('line', { x1: 8, y1: -h / 2 + 9, x2: 8, y2: h / 2 - 9, class: 'csym' }));
-    } else if (c.type === 'resistor' || c.type === 'lamp') {
+      g.appendChild(el('text', { x: -16, y: -h / 2 - 4, class: 'cmini' }, '+'));
+    } else if (c.type === 'resistor' || c.type === 'lamp' || c.type === 'pot') {
       var pts = [];
       for (var i = 0; i <= 8; i++) pts.push((-w / 2 + 8 + i * (w - 16) / 8) + ',' + (i % 2 ? -5 : 5));
       g.appendChild(el('polyline', { points: pts.join(' '), class: 'csym' }));
-    } else if (c.type === 'led') {
-      g.appendChild(el('circle', { cx: 0, cy: 0, r: 7, class: 'csym' }));
-      g.appendChild(el('line', { x1: 7, y1: 0, x2: 15, y2: 0, class: 'csym' }));
+      if (c.type === 'pot') g.appendChild(el('path', { d: 'M0,-14l0,7m-4,-4l8,0', class: 'csym thin' }));
+      if (c.type === 'lamp') g.appendChild(el('path', { d: 'M-6,-7L6,7M-6,7L6,-7', class: 'csym thin' }));
+    } else if (c.type === 'led' || c.type === 'diode' || c.type === 'zener') {
+      g.appendChild(el('path', { d: 'M-6,-8L-6,8L7,0Z', class: 'cfill' }));
+      if (c.type === 'zener') g.appendChild(el('path', { d: 'M7,-9v4l4,0v10l-4,0v4', class: 'csym' }));
+      else g.appendChild(el('line', { x1: 7, y1: -8, x2: 7, y2: 8, class: 'csym' }));
+      if (c.type === 'led') {
+        g.appendChild(el('path', { d: 'M10,-9l6,-4M13,-11l3,4', class: 'csym thin' }));
+        g.appendChild(el('path', { d: 'M12,-5l6,-4M15,-7l3,4', class: 'csym thin' }));
+      }
+    } else if (c.type === 'inductor') {
+      var l = 'M' + (-w / 2 + 6) + ',4';
+      for (var k = 0; k < 4; k++) l += 'a5,5 0 0 1 10,0';
+      g.appendChild(el('path', { d: l, class: 'csym' }));
+    } else if (c.type === 'fuse') {
+      g.appendChild(el('rect', { x: -w / 2 + 6, y: -7, width: w - 12, height: 14, rx: 4, class: 'csym thin' }));
+      g.appendChild(el('line', { x1: -w / 2 + 6, y1: 0, x2: w / 2 - 6, y2: 0, class: 'csym' }));
     } else if (c.type === 'switch') {
       g.appendChild(el('line', { x1: -12, y1: 0, x2: 2, y2: c.props.closed ? 0 : -9, class: 'csym' }));
       g.appendChild(el('circle', { cx: -12, cy: 0, r: 2 })); g.appendChild(el('circle', { cx: 12, cy: 0, r: 2 }));
     } else if (c.type === 'capacitor') {
       g.appendChild(el('line', { x1: -4, y1: -10, x2: -4, y2: 10, class: 'csym' }));
       g.appendChild(el('line', { x1: 4, y1: -10, x2: 4, y2: 10, class: 'csym' }));
+    } else if (c.type === 'ammeter' || c.type === 'voltmeter') {
+      g.appendChild(el('circle', { cx: 0, cy: 0, r: 11, class: 'csym' }));
+      g.appendChild(el('text', { x: 0, y: 4, class: 'cmini mid' }, c.type === 'ammeter' ? 'A' : 'V'));
+    } else if (c.type === 'csource') {
+      g.appendChild(el('circle', { cx: 0, cy: 0, r: 10, class: 'csym' }));
+      g.appendChild(el('path', { d: 'M-4,0L4,0M1,-3l3,3l-3,3', class: 'csym thin' }));
+    } else if (c.type === 'ldr') {
+      g.appendChild(el('circle', { cx: 0, cy: 0, r: 10, class: 'cbody' }));
+      g.appendChild(el('path', { d: 'M-7,5l3,-4l3,6l3,-6l3,4', class: 'csym thin' }));
+      g.appendChild(el('path', { d: 'M-16,-12l-5,-6M-9,-14l-3,-6M16,-12l5,-6M9,-14l3,-6', class: 'csym thin' }));
+    } else if (c.type === 'npn') {
+      g.appendChild(el('circle', { cx: 0, cy: 0, r: 15, class: 'csym' }));
+      g.appendChild(el('line', { x1: -5, y1: -9, x2: -5, y2: 9, class: 'csym' }));
+      g.appendChild(el('line', { x1: -16, y1: 0, x2: -5, y2: 0, class: 'csym' }));
+      g.appendChild(el('path', { d: 'M-5,-5l10,-7M-5,5l10,7', class: 'csym' }));
+      g.appendChild(el('path', { d: 'M3,3l4,7l-6,-1', class: 'csym thin' }));
+    } else if (c.type === 'buzzer') {
+      g.appendChild(el('path', { d: 'M-8,-10h-6v20h6l8,8V-18Z', class: 'cfill' }));
+      g.appendChild(el('path', { d: 'M11,-7a8,8 0 0 1 0,14M15,-11a13,13 0 0 1 0,22', class: 'csym thin' }));
     } else if (c.type === 'ground') {
       g.appendChild(el('line', { x1: -10, y1: 4, x2: 10, y2: 4, class: 'csym' }));
       g.appendChild(el('line', { x1: -6, y1: 9, x2: 6, y2: 9, class: 'csym' }));
@@ -142,9 +175,19 @@
     var label = DEFS[c.type].label;
     if (c.type === 'battery') label = c.props.v + 'V';
     else if (c.type === 'resistor' || c.type === 'lamp') label = c.props.r + '\u03A9';
+    else if (c.type === 'pot') label = (c.props.r >= 1000 ? (c.props.r / 1000) + 'k' : c.props.r) + '\u03A9';
     else if (c.type === 'led') label = 'LED';
+    else if (c.type === 'diode') label = 'D';
+    else if (c.type === 'zener') label = c.props.vz + 'V';
+    else if (c.type === 'inductor') label = 'L';
+    else if (c.type === 'fuse') label = c.props.rating + 'A';
     else if (c.type === 'capacitor') label = c.props.c + 'nF';
     else if (c.type === 'switch') label = c.props.closed ? 'Tutup' : 'Buka';
+    else if (c.type === 'csource') label = (c.props.i * 1000).toFixed(0) + 'mA';
+    else if (c.type === 'ammeter' || c.type === 'voltmeter') label = '';
+    else if (c.type === 'ldr') label = c.props.lux + ' lx';
+    else if (c.type === 'npn') label = 'NPN';
+    else if (c.type === 'buzzer') label = 'Bz';
     g.appendChild(el('text', { x: 0, y: h / 2 + (c.type === 'ground' ? 30 : 20), class: 'clabel' }, label));
 
     d.pins.forEach(function (p) {
@@ -224,7 +267,16 @@
       resistor: [['r', 'Hambatan (\u03A9)', 0.1, 10000000, 10]],
       lamp: [['r', 'Hambatan (\u03A9)', 0.1, 10000000, 10]],
       led: [['vf', 'Tegangan maju (V)', 0.1, 30, 0.1]],
-      capacitor: [['c', 'Kapasitansi (nF)', 0.1, 100000, 10]]
+      capacitor: [['c', 'Kapasitansi (nF)', 0.1, 100000, 10]],
+      ldr: [['lux', 'Cahaya (lux)', 0, 1000, 10]],
+      npn: [['beta', 'Penguatan (hFE)', 1, 1000, 10]],
+      buzzer: [['r', 'Hambatan (\u03A9)', 0.1, 10000000, 10]],
+      fuse: [['rating', 'Batas arus (A)', 0.001, 100, 0.1]],
+      csource: [['i', 'Arus (A)', -10, 10, 0.001]],
+      pot: [['r', 'Hambatan (\u03A9)', 0.1, 10000000, 100]],
+      inductor: [['r', 'Hambatan DC (\u03A9)', 0, 1000, 0.01]],
+      diode: [['vf', 'Tegangan maju (V)', 0.1, 30, 0.1]],
+      zener: [['vz', 'Tegangan zener (V)', 0.5, 50, 0.1]]
     }[item.type] || [];
 
     fields.forEach(function (f) {
@@ -266,6 +318,16 @@
 
     var actions = document.createElement('div');
     actions.className = 'insp-actions';
+    if (DEFS[item.type].dsUrl) {
+      var dsl = document.createElement('a');
+      dsl.className = 'btn small ghost';
+      dsl.textContent = 'Datasheet';
+      dsl.href = DEFS[item.type].dsUrl;
+      dsl.target = '_blank';
+      dsl.rel = 'noopener noreferrer';
+      dsl.referrerPolicy = 'no-referrer';
+      actions.appendChild(dsl);
+    }
     [['Putar', function () { snapshot(); item.rot = ((item.rot || 0) + 90) % 360; S.result = null; renderAll(); scheduleDraft(); }],
      ['Hapus', function () { deleteSelection(); }]].forEach(function (a) {
       var b = document.createElement('button');

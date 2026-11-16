@@ -105,6 +105,10 @@ main { flex: 1; overflow-y: auto; overflow-x: hidden; padding-bottom: 8px; }
 .cbody { fill: #fff; stroke: #C9C4B6; stroke-width: 1.5; }
 .comp.sel .cbody { stroke: var(--accent); stroke-width: 2.5; }
 .csym { fill: none; stroke: var(--ink); stroke-width: 1.8; stroke-linecap: round; }
+.csym.thin { stroke-width: 1.2; }
+.cfill { fill: var(--ink); stroke: var(--ink); stroke-width: 1; stroke-linejoin: round; }
+.cmini { font-size: 9px; fill: var(--ink-soft); font-family: inherit; }
+.cmini.mid { text-anchor: middle; font-weight: 700; fill: var(--ink); }
 .comp circle[class=""] { fill: var(--ink); }
 .cpin { fill: var(--bg); stroke: var(--ink); stroke-width: 1.6; }
 .cpin.active { fill: var(--accent); stroke: var(--accent-dk); }

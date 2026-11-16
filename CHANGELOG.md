@@ -2,6 +2,12 @@
 
 Setiap build punya ID di tab Sistem. Rename `BUILD` di `core.js` tiap rilis supaya catatan bug bisa dipetakan ke versi.
 
+## 2026.11.17-r2
+- 11 komponen baru: potensiometer, dioda, dioda zener, induktor, sekring, amperemeter, voltmeter, sumber arus, LDR, transistor NPN (BC547), buzzer.
+- Mesin simulasi: model dioda/zener dua arah, sekring putus otomatis, voltmeter tanpa menyerap arus, sumber arus, LDR (0-1000 lux), transistor NPN dengan mode cut-off/aktif/jenuh, deteksi regresi memakai solusi final yang konsisten.
+- Tautan datasheet per komponen (alldatasheet.com) dibuka di tab baru dengan noopener/noreferrer.
+- Uji mesin naik dari 8 ke 22 kasus; uji mandiri aplikasi jadi 6 kasus.
+
 ## 2026.11.16-r1
 - Rilis pertama: kanvas rangkaian (grid, geser, putar, zoom, undo/redo), 7 komponen, kabel antar pin.
 - Mesin simulasi DC (MNA): baterai, resistor, lampu, LED (iteratif), saklar; kapasitor terbuka untuk DC.

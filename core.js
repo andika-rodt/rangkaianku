@@ -2,7 +2,7 @@
 (function (root) {
   'use strict';
 
-  var BUILD = '2026.11.16-r1';
+  var BUILD = '2026.11.17-r2';
   var SCHEMA = 1;
   var KEY_CIRCUITS = 'rk.circuits.v1';
   var KEY_BUGS = 'rk.buglog.v1';
@@ -76,7 +76,16 @@
     });
     if (type === 'battery') out.v = num(out.v, 0.1, 100, 9);
     if (type === 'resistor' || type === 'lamp') out.r = num(out.r, 0.1, 10000000, d.props.r);
+    if (type === 'pot') out.r = num(out.r, 0.1, 10000000, 10000);
     if (type === 'led') out.vf = num(out.vf, 0.1, 30, 1.8);
+    if (type === 'diode') out.vf = num(out.vf, 0.1, 30, 0.7);
+    if (type === 'zener') { out.vz = num(out.vz, 0.5, 50, 5.1); out.vf = num(out.vf, 0.1, 30, 0.7); }
+    if (type === 'inductor') out.r = num(out.r, 0, 1000, 0.05);
+    if (type === 'fuse') out.rating = num(out.rating, 0.001, 100, 0.5);
+    if (type === 'csource') out.i = num(out.i, -10, 10, 0.01);
+    if (type === 'ldr') out.lux = num(out.lux, 0, 1000, 100);
+    if (type === 'npn') { out.beta = num(out.beta, 1, 1000, 200); out.vbe = num(out.vbe, 0.1, 2, 0.7); }
+    if (type === 'buzzer') out.r = num(out.r, 0.1, 10000000, 100);
     if (type === 'switch') out.closed = out.closed === true;
     return out;
   }

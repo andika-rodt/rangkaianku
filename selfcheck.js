@@ -62,6 +62,40 @@
     }
   ];
 
+  CASES.push({
+    name: 'transistor-npn', run: function () {
+      var r = RK.simulate(
+        [c('B', 'battery', { v: 12 }), c('R2', 'resistor', { r: 470 }), c('D1', 'led', { vf: 1.8 }),
+         c('Q1', 'npn', { beta: 200 }), c('R1', 'resistor', { r: 10000 }), c('G', 'ground')],
+        [w('B', 'p', 'R1', 'a'), w('R1', 'b', 'Q1', 'b'), w('B', 'p', 'R2', 'a'), w('R2', 'b', 'D1', 'a'),
+         w('D1', 'b', 'Q1', 'c'), w('Q1', 'e', 'B', 'n'), w('B', 'n', 'G', 'g')]
+      );
+      if (!r.ok) return r.error;
+      var q = r.elements.filter(function (e) { return e.id === 'Q1'; })[0];
+      if (!q || !q.on) return 'transistor tidak aktif';
+      var led = r.elements.filter(function (e) { return e.id === 'D1'; })[0];
+      if (!led || !led.on) return 'LED tidak menyala';
+      if (Math.abs(led.i) < 0.005 || Math.abs(led.i) > 0.1) return 'arus LED aneh: ' + led.i;
+      return null;
+    }
+  });
+
+  CASES.push({
+    name: 'ldr-terang-gelap', run: function () {
+      function v(lux) {
+        var r = RK.simulate(
+          [c('B', 'battery', { v: 12 }), c('R3', 'resistor', { r: 330 }), c('L1', 'ldr', { lux: lux }), c('G', 'ground')],
+          [w('B', 'p', 'R3', 'a'), w('R3', 'b', 'L1', 'a'), w('L1', 'b', 'B', 'n'), w('B', 'n', 'G', 'g')]
+        );
+        if (!r.ok) throw new Error(r.error);
+        return r.elements.filter(function (e) { return e.id === 'L1'; })[0].v;
+      }
+      var terang = v(1000), gelap = v(0);
+      if (!(gelap > terang + 1)) return 'gelap ' + gelap.toFixed(2) + ' vs terang ' + terang.toFixed(2);
+      return null;
+    }
+  });
+
   root.RK.runSelfCheck = function () {
     return CASES.map(function (t) {
       var err;

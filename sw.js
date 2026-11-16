@@ -1,7 +1,7 @@
 /* RangkaianKu - service worker (app shell offline, cache berversi) */
 'use strict';
 
-var CACHE = 'rangkaianku-2026-11-16-r1';
+var CACHE = 'rangkaianku-2026-11-17-r2';
 var ASSETS = [
   './',
   './index.html',
