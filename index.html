@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'">
+<meta name="theme-color" content="#F6F4EF">
+<meta name="description" content="RangkaianKu - belajar dan simulasikan rangkaian listrik di HP.">
+<title>RangkaianKu</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="app">
+  <header class="topbar">
+    <div class="grow">
+      <h1>RangkaianKu</h1>
+      <p class="muted small">Belajar &amp; simulasikan rangkaian listrik</p>
+    </div>
+    <span id="bug-count" class="badge"></span>
+  </header>
+
+  <div id="banner" class="banner" role="status"></div>
+
+  <main>
+    <section id="view-canvas" class="view active">
+      <div class="board">
+        <svg id="svg" aria-label="Kanvas rangkaian">
+          <defs>
+            <pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse">
+              <circle cx="1.5" cy="1.5" r="1.5" fill="#DBD6C8"></circle>
+            </pattern>
+          </defs>
+          <g id="world">
+            <g id="grid"></g>
+            <g id="layer-wires"></g>
+            <g id="layer-comps"></g>
+            <g id="layer-live"></g>
+          </g>
+        </svg>
+        <div class="zoombar">
+          <button id="zoomin" aria-label="Perbesar">+</button>
+          <button id="zoomout" aria-label="Perkecil">&minus;</button>
+          <button id="fit" aria-label="Muat semua">&#9974;</button>
+        </div>
+      </div>
+
+      <div class="namebar">
+        <input id="circuit-name" maxlength="40" placeholder="Nama rangkaian" aria-label="Nama rangkaian">
+      </div>
+
+      <div class="toolbar">
+        <button id="btn-mode-select" class="chip on" type="button">Pilih</button>
+        <button id="btn-mode-wire" class="chip" type="button">Sambung</button>
+        <button id="btn-rotate" class="chip" type="button">Putar</button>
+        <button id="btn-delete" class="chip" type="button">Hapus</button>
+        <button id="btn-undo" class="chip" type="button">Undo</button>
+        <button id="btn-redo" class="chip" type="button">Redo</button>
+      </div>
+
+      <div class="toolbar primary-row">
+        <button id="btn-sim" class="btn" type="button">Jalankan Simulasi</button>
+        <button id="btn-save" class="btn ghost" type="button">Simpan</button>
+      </div>
+
+      <div id="inspector" class="inspector"></div>
+    </section>
+
+    <section id="view-parts" class="view">
+      <h2>Pustaka Komponen</h2>
+      <p class="muted small">Ketuk komponen untuk menambahkannya ke kanvas.</p>
+      <div id="parts-list" class="tiles"></div>
+    </section>
+
+    <section id="view-saved" class="view">
+      <h2>Rangkaian Saya</h2>
+      <div id="saved-list" class="stack"></div>
+    </section>
+
+    <section id="view-system" class="view">
+      <h2>Sistem &amp; Keamanan</h2>
+      <div class="card">
+        <div class="card-title">Versi aplikasi</div>
+        <p class="muted small">Build <span id="sys-build">-</span></p>
+        <p class="muted small">Data disimpan lokal di HP ini. Tidak ada koneksi keluar, tidak ada pelacakan.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Uji mandiri saat aplikasi dibuka</div>
+        <div id="sys-selftest" class="stack-sm"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Catatan bug otomatis</div>
+        <p class="muted small">Error, kegagalan uji, atau data rusak dicatat bersama build dan 12 aksi terakhir.</p>
+        <div id="sys-bugs" class="stack-sm"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Cadangan</div>
+        <div class="toolbar">
+          <button id="btn-export" class="btn small" type="button">Ekspor JSON</button>
+          <button id="btn-import" class="btn small ghost" type="button">Impor JSON</button>
+        </div>
+        <p class="muted small">File impor divalidasi ketat: jenis komponen, rentang nilai, dan jumlah dibatasi.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Zona berbahaya</div>
+        <div class="toolbar">
+          <button id="btn-clearbugs" class="btn small ghost" type="button">Bersihkan catatan bug</button>
+          <button id="btn-reset" class="btn small danger" type="button">Hapus semua data lokal</button>
+        </div>
+        <button id="btn-install" class="btn small" type="button" hidden>Pasang ke layar utama</button>
+      </div>
+    </section>
+  </main>
+
+  <nav class="tabbar">
+    <button data-tab="canvas" class="on" type="button">Kanvas</button>
+    <button data-tab="parts" type="button">Komponen</button>
+    <button data-tab="saved" type="button">Tersimpan</button>
+    <button data-tab="system" type="button">Sistem</button>
+  </nav>
+</div>
+
+<div id="toast" class="toast" role="status"></div>
+<input type="file" id="file-input" accept="application/json,.json" hidden>
+
+<script src="sim.js"></script>
+<script src="core.js"></script>
+<script src="selfcheck.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
